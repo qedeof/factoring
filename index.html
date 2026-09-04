@@ -60,12 +60,12 @@
             <!-- Input & Config Card -->
             <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
                 <div class="max-w-2xl mx-auto text-center space-y-4">
-                    <h2 class="text-2xl font-bold text-slate-800">Quadratic & Polynomial Factoring Tool</h2>
-                    <p class="text-slate-600 text-sm">Enter a polynomial in standard form $ax^2 + bx + c$ to get a breakdown of factors and detailed steps.</p>
+                    <h2 class="text-2xl font-bold text-slate-800">Algebraic Factoring Tool</h2>
+                    <p class="text-slate-600 text-sm">Enter quadratics, cubes ($x^3 \pm b^3$), or 4-term polynomials to get a complete step-by-step breakdown.</p>
                     
                     <div class="flex flex-col sm:flex-row gap-3 pt-2">
                         <div class="relative flex-grow">
-                            <input type="text" id="expr-input" value="x^2 + 5x + 6" placeholder="e.g. 2x^2 - 7x + 3" 
+                            <input type="text" id="expr-input" value="x^2 + 5x + 6" placeholder="e.g. x^3 - 27 or x^3 + 3x^2 + 2x + 6" 
                                 onkeydown="if(event.key === 'Enter') factorExpression()"
                                 class="w-full px-4 py-3.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#126988] font-mono text-lg shadow-inner">
                         </div>
@@ -79,10 +79,10 @@
                     <div class="flex flex-wrap items-center justify-center gap-2 pt-2 text-xs text-slate-500">
                         <span>Quick Examples:</span>
                         <button onclick="setPreset('x^2 + 5x + 6')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200">x² + 5x + 6</button>
-                        <button onclick="setPreset('2x^2 + 7x + 3')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200">2x² + 7x + 3</button>
                         <button onclick="setPreset('x^2 - 16')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200">x² - 16</button>
-                        <button onclick="setPreset('3x^2 + 6x')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200">3x² + 6x</button>
-                        <button onclick="setPreset('4x^2 - 12x + 9')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200">4x² - 12x + 9</button>
+                        <button onclick="setPreset('x^3 - 27')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200">x³ - 27</button>
+                        <button onclick="setPreset('x^3 + 8')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200">x³ + 8</button>
+                        <button onclick="setPreset('x^3 + 3x^2 + 2x + 6')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200">x³ + 3x² + 2x + 6</button>
                     </div>
                 </div>
             </div>
@@ -157,7 +157,8 @@
                     <span class="text-sm font-semibold text-slate-600 flex items-center mr-2">Difficulty:</span>
                     <button onclick="setDifficulty('easy')" id="diff-easy" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-[#126988] text-white">Easy (a = 1)</button>
                     <button onclick="setDifficulty('medium')" id="diff-medium" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200">Medium (a > 1)</button>
-                    <button onclick="setDifficulty('special')" id="diff-special" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200">Special Products</button>
+                    <button onclick="setDifficulty('special')" id="diff-special" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200">Special Products & Cubes</button>
+                    <button onclick="setDifficulty('grouping')" id="diff-grouping" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200">4-Term Grouping</button>
                     <button onclick="setDifficulty('mixed')" id="diff-mixed" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200">Mixed Challenge</button>
                 </div>
 
@@ -209,13 +210,13 @@
                 <!-- Card 1: GCF -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
                     <div class="flex items-center gap-3">
-                        <div class="bg-[#0e6537]/10 p-2 rounded-lg text-[#0e6537]"><i data-lucide="shrink"></i></div>
+                        <div class="bg-slate-100 p-2 rounded-lg text-slate-600"><i data-lucide="shrink"></i></div>
                         <h3 class="font-bold text-lg text-slate-800">1. Greatest Common Factor (GCF)</h3>
                     </div>
                     <p class="text-slate-600 text-sm">Always the <strong>first step</strong>! Identify numbers/variables shared by every term.</p>
                     <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-sm font-mono">
                         $ab + ac = a(b + c)$<br>
-                        <span class="text-[#0e6537] font-sans text-xs">Ex: $6x^2 + 9x = 3x(2x + 3)$</span>
+                        <span class="text-slate-600 font-sans text-xs">Ex: $6x^2 + 9x = 3x(2x + 3)$</span>
                     </div>
                 </div>
 
@@ -232,29 +233,30 @@
                     </div>
                 </div>
 
-                <!-- Card 3: Simple Trinomials -->
+                <!-- Card 3: Sum & Difference of Cubes -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
                     <div class="flex items-center gap-3">
-                        <div class="bg-[#0e6537]/10 p-2 rounded-lg text-[#0e6537]"><i data-lucide="grid"></i></div>
-                        <h3 class="font-bold text-lg text-slate-800">3. Trinomials ($x^2 + bx + c$)</h3>
+                        <div class="bg-sky-100 p-2 rounded-lg text-sky-700"><i data-lucide="box"></i></div>
+                        <h3 class="font-bold text-lg text-slate-800">3. Sum & Difference of Cubes</h3>
                     </div>
-                    <p class="text-slate-600 text-sm">Find two numbers $p$ and $q$ that <strong>multiply to $c$</strong> and <strong>add up to $b$</strong>.</p>
+                    <p class="text-slate-600 text-sm">Use the <strong>SOAP</strong> rule for signs: <u>S</u>ame, <u>O</u>pposite, <u>A</u>lways <u>P</u>ositive.</p>
                     <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-sm font-mono">
-                        $x^2 + (p+q)x + (pq) = (x + p)(x + q)$<br>
-                        <span class="text-[#0e6537] font-sans text-xs">Ex: $x^2 + 7x + 12 = (x + 3)(x + 4)$</span>
+                        $a^3 + b^3 = (a + b)(a^2 - ab + b^2)$<br>
+                        $a^3 - b^3 = (a - b)(a^2 + ab + b^2)$<br>
+                        <span class="text-sky-700 font-sans text-xs">Ex: $x^3 - 8 = (x - 2)(x^2 + 2x + 4)$</span>
                     </div>
                 </div>
 
-                <!-- Card 4: AC Method -->
+                <!-- Card 4: Factoring by Grouping -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
                     <div class="flex items-center gap-3">
-                        <div class="bg-[#0e6537]/10 p-2 rounded-lg text-[#0e6537]"><i data-lucide="cpu"></i></div>
-                        <h3 class="font-bold text-lg text-slate-800">4. AC Method ($ax^2 + bx + c$)</h3>
+                        <div class="bg-purple-100 p-2 rounded-lg text-purple-600"><i data-lucide="layers"></i></div>
+                        <h3 class="font-bold text-lg text-slate-800">4. Factoring 4 Terms by Grouping</h3>
                     </div>
-                    <p class="text-slate-600 text-sm">Multiply $a \cdot c$. Find factors of $ac$ that add up to $b$. Split the middle term and factor by grouping.</p>
+                    <p class="text-slate-600 text-sm">Group the 4 terms into pairs, factor out GCFs, and extract the matching binomial.</p>
                     <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-sm font-mono">
-                        $2x^2 + 7x + 3 \rightarrow ac = 6$<br>
-                        <span class="text-[#0e6537] font-sans text-xs">Factors: $6$ and $1$ $\rightarrow 2x^2 + 6x + 1x + 3 = (2x+1)(x+3)$</span>
+                        $x^3 + 3x^2 + 2x + 6 = x^2(x+3) + 2(x+3)$<br>
+                        <span class="text-purple-600 font-sans text-xs">Result: $(x^2 + 2)(x + 3)$</span>
                     </div>
                 </div>
             </div>
@@ -271,15 +273,15 @@
                     </div>
                     <div class="bg-[#004c6e]/10 p-4 rounded-xl border border-[#004c6e] space-y-2">
                         <span class="font-bold text-[#004c6e] block text-sm">Step 2: 2 Terms?</span>
-                        <p class="text-slate-600">Check for Difference of Squares ($a^2 - b^2$).</p>
+                        <p class="text-slate-600">Check Difference of Squares ($a^2-b^2$) or Cubes ($a^3 \pm b^3$).</p>
                     </div>
                     <div class="bg-[#004c6e]/10 p-4 rounded-xl border border-[#004c6e] space-y-2">
                         <span class="font-bold text-[#004c6e] block text-sm">Step 3: 3 Terms?</span>
                         <p class="text-slate-600">Use product-sum strategy ($a=1$) or AC Method ($a>1$).</p>
                     </div>
                     <div class="bg-[#004c6e]/10 p-4 rounded-xl border border-[#004c6e] space-y-2">
-                        <span class="font-bold text-[#004c6e] block text-sm">Step 4: Check</span>
-                        <p class="text-slate-600">Multiply factors back out (FOIL) to verify correctness.</p>
+                        <span class="font-bold text-[#004c6e] block text-sm">Step 4: 4 Terms?</span>
+                        <p class="text-slate-600">Group terms in pairs, factor GCFs, and factor binomials.</p>
                     </div>
                 </div>
             </div>
@@ -335,52 +337,6 @@
             factorExpression();
         }
 
-        // --- Math & Factoring Logic Engine ---
-        function parseQuadratic(str) {
-            // Clean input string
-            str = str.replace(/\s+/g, '').replace(/\^2/g, '²').toLowerCase();
-            if (!str) return { valid: false };
-
-            // Ensure leading sign
-            if (!str.startsWith('+') && !str.startsWith('-')) {
-                str = '+' + str;
-            }
-
-            // Match terms e.g. +2x², -7x, +3, -25
-            const termRegex = /([+-])(\d*)(x²|x)?/g;
-            let match;
-            let a = 0, b = 0, c = 0;
-            let matchedLength = 0;
-
-            while ((match = termRegex.exec(str)) !== null) {
-                const sign = match[1] === '-' ? -1 : 1;
-                const numStr = match[2];
-                const varPart = match[3];
-
-                // Stop if no coefficient and no variable matched for this sign
-                if (!numStr && !varPart) break;
-
-                matchedLength += match[0].length;
-
-                let val = (numStr === '') ? sign : sign * parseInt(numStr, 10);
-
-                if (varPart === 'x²') {
-                    a += val;
-                } else if (varPart === 'x') {
-                    b += val;
-                } else {
-                    c += val;
-                }
-            }
-
-            // Must match full input string and have a quadratic (x²) term
-            if (matchedLength === str.length && a !== 0) {
-                return { a, b, c, valid: true };
-            }
-
-            return { valid: false };
-        }
-
         function gcd(x, y) {
             x = Math.abs(x);
             y = Math.abs(y);
@@ -390,6 +346,175 @@
                 x = t;
             }
             return x;
+        }
+
+        // --- Comprehensive Polynomial Parser & Factoring Engine ---
+        function parsePolynomial(str) {
+            str = str.replace(/\s+/g, '').replace(/\^3/g, '³').replace(/\^2/g, '²').toLowerCase();
+            if (!str) return { valid: false };
+
+            if (!str.startsWith('+') && !str.startsWith('-')) {
+                str = '+' + str;
+            }
+
+            const termRegex = /([+-])(\d*)(x³|x²|x)?/g;
+            let match;
+            let a3 = 0, a2 = 0, a1 = 0, c = 0;
+            let matchedLength = 0;
+
+            while ((match = termRegex.exec(str)) !== null) {
+                const sign = match[1] === '-' ? -1 : 1;
+                const numStr = match[2];
+                const varPart = match[3];
+
+                if (!numStr && !varPart) break;
+
+                matchedLength += match[0].length;
+                let val = (numStr === '') ? sign : sign * parseInt(numStr, 10);
+
+                if (varPart === 'x³') a3 += val;
+                else if (varPart === 'x²') a2 += val;
+                else if (varPart === 'x') a1 += val;
+                else c += val;
+            }
+
+            if (matchedLength === str.length) {
+                return { a3, a2, a1, c, valid: true };
+            }
+
+            return { valid: false };
+        }
+
+        function factorExpressionEngine(poly) {
+            const { a3, a2, a1, c } = poly;
+
+            // 1. Cubes: a3*x^3 + c (where a2=0, a1=0)
+            if (a3 !== 0 && a2 === 0 && a1 === 0 && c !== 0) {
+                let overallGcf = gcd(a3, c);
+                if (a3 < 0) overallGcf = -overallGcf;
+
+                let gcfStr = (overallGcf !== 1) ? (overallGcf === -1 ? "-" : `${overallGcf}`) : "";
+                let a3_1 = a3 / overallGcf;
+                let c_1 = c / overallGcf;
+
+                let rootA = Math.cbrt(Math.abs(a3_1));
+                let rootC = Math.cbrt(Math.abs(c_1));
+
+                if (Number.isInteger(Math.round(rootA)) && Math.abs(Math.round(rootA) - rootA) < 1e-5 &&
+                    Number.isInteger(Math.round(rootC)) && Math.abs(Math.round(rootC) - rootC) < 1e-5) {
+                    
+                    rootA = Math.round(rootA);
+                    rootC = Math.round(rootC);
+                    
+                    let isDifference = c_1 < 0;
+                    let type = isDifference ? "Difference of Cubes" : "Sum of Cubes";
+                    let sign1 = isDifference ? "-" : "+";
+                    let sign2 = isDifference ? "+" : "-";
+
+                    let termA = rootA === 1 ? "x" : `${rootA}x`;
+                    let termA2 = rootA * rootA === 1 ? "x^2" : `${rootA * rootA}x^2`;
+                    let termAB = rootA * rootC === 1 ? "x" : `${rootA * rootC}x`;
+                    let termB2 = rootC * rootC;
+
+                    let steps = [];
+                    if (overallGcf !== 1) {
+                        steps.push({
+                            title: "Factor out the GCF",
+                            desc: `Extract common multiplier <strong>${overallGcf}</strong>.`,
+                            math: `${a3}x^3 ${c>=0?'+':''}${c} = ${gcfStr}(${a3_1}x^3 ${c_1>=0?'+':''}${c_1})`
+                        });
+                    }
+
+                    steps.push({
+                        title: `Identify Cube Roots (${type})`,
+                        desc: `Represent terms as $A^3 ${isDifference?'-':'+'} B^3$ where $A = ${termA}$ and $B = ${rootC}$.`,
+                        math: `A = ${termA}, \\quad B = ${rootC}`
+                    });
+
+                    steps.push({
+                        title: "Apply Special Cubes Formula (SOAP Rule)",
+                        desc: `Formula: $A^3 ${isDifference?'-':'+'} B^3 = (A ${sign1} B)(A^2 ${sign2} AB + B^2)$`,
+                        math: `${gcfStr}(${termA} ${sign1} ${rootC})(${termA2} ${sign2} ${termAB} + ${termB2})`
+                    });
+
+                    let resultTex = `${gcfStr}(${termA} ${sign1} ${rootC})(${termA2} ${sign2} ${termAB} + ${termB2})`;
+                    return { steps, resultTex, type, gridData: null };
+                }
+            }
+
+            // 2. Factoring 4 Terms by Grouping: a3*x^3 + a2*x^2 + a1*x + c
+            if (a3 !== 0 && a2 !== 0 && a1 !== 0 && c !== 0) {
+                let overallGcf = gcd(a3, gcd(a2, gcd(a1, c)));
+                if (a3 < 0) overallGcf = -overallGcf;
+
+                let gcfStr = (overallGcf !== 1) ? (overallGcf === -1 ? "-" : `${overallGcf}`) : "";
+                let A3 = a3 / overallGcf;
+                let A2 = a2 / overallGcf;
+                let A1 = a1 / overallGcf;
+                let C = c / overallGcf;
+
+                // Group 1: A3*x^3 + A2*x^2 = x^2 * (g1_x * x + g1_c)
+                let g1 = gcd(A3, A2);
+                let g1_x = A3 / g1;
+                let g1_c = A2 / g1;
+
+                // Group 2: A1*x + C = g2 * (g2_x * x + g2_c)
+                let g2 = gcd(A1, C);
+                if (A1 < 0) g2 = -Math.abs(g2);
+
+                let g2_x = A1 / g2;
+                let g2_c = C / g2;
+
+                if (g1_x === g2_x && g1_c === g2_c) {
+                    let steps = [];
+                    let type = "Factoring by Grouping (4 Terms)";
+
+                    if (overallGcf !== 1) {
+                        steps.push({
+                            title: "Factor out overall GCF",
+                            desc: `Extract GCF <strong>${overallGcf}</strong> from all four terms.`,
+                            math: `${gcfStr}(${A3}x^3 ${A2>=0?'+':''}${A2}x^2 ${A1>=0?'+':''}${A1}x ${C>=0?'+':''}${C})`
+                        });
+                    }
+
+                    let group1Tex = `${A3}x^3 ${A2>=0?'+':''}${A2}x^2`;
+                    let group2Tex = `${A1>=0?'+':''}${A1}x ${C>=0?'+':''}${C}`;
+
+                    steps.push({
+                        title: "Pair Terms into Two Groups",
+                        desc: "Group the first two terms together and the last two terms together.",
+                        math: `(${group1Tex}) + (${group2Tex})`
+                    });
+
+                    let binomialInside = `${g1_x === 1 ? '' : g1_x}x ${g1_c >= 0 ? '+' : ''}${g1_c}`;
+                    let g1Coeff = g1 === 1 ? "" : `${g1}`;
+                    let g2CoeffStr = g2 >= 0 ? `+ ${g2}` : `- ${Math.abs(g2)}`;
+
+                    steps.push({
+                        title: "Factor out Common Factors from Each Group",
+                        desc: `Extract $${g1Coeff}x^2$ from the first pair and $${g2}$ from the second pair.`,
+                        math: `${gcfStr}\\left[ ${g1Coeff}x^2(${binomialInside}) ${g2CoeffStr}(${binomialInside}) \\right]`
+                    });
+
+                    let firstBinomial = `${g1Coeff}x^2 ${g2CoeffStr}`.replace("1x^2", "x^2").replace("+ ", "+").replace("- ", "-");
+                    let resultTex = `${gcfStr}(${firstBinomial})(${binomialInside})`;
+
+                    steps.push({
+                        title: "Extract the Common Binomial Factor",
+                        desc: `Both terms share the common factor $(${binomialInside})$.`,
+                        math: resultTex
+                    });
+
+                    return { steps, resultTex, type, gridData: null };
+                }
+            }
+
+            // 3. Quadratics (a3 == 0)
+            if (a3 === 0) {
+                return factorQuadratic(a2, a1, c);
+            }
+
+            return { error: "Unable to factor polynomial with standard methods." };
         }
 
         function factorQuadratic(a, b, c) {
@@ -402,9 +527,8 @@
                 return { error: "Not a quadratic expression (coefficient of x² is 0)." };
             }
 
-            // 1. Overall GCF Extraction
             let overallGcf = gcd(a, gcd(b, c));
-            if (a < 0) overallGcf = -overallGcf; // keep leading term positive inside bracket
+            if (a < 0) overallGcf = -overallGcf;
 
             let gcfStr = "";
             if (overallGcf !== 1) {
@@ -424,7 +548,6 @@
                 });
             }
 
-            // 2. Case: c1 == 0 (Single x factor)
             if (c1 === 0) {
                 type = "GCF / Linear Factor";
                 steps.push({
@@ -436,7 +559,6 @@
                 return { steps, resultTex, type, gridData: null };
             }
 
-            // 3. Case: Difference of Squares (b1 == 0, c1 < 0)
             if (b1 === 0 && c1 < 0) {
                 type = "Difference of Squares";
                 let sqrtA = Math.sqrt(a1);
@@ -454,11 +576,9 @@
                 }
             }
 
-            // 4. Standard Trinomial Factoring / AC Method
             let ac = a1 * c1;
             let p = null, q = null;
 
-            // Search for factors p, q such that p * q = ac AND p + q = b1
             for (let i = -Math.abs(ac); i <= Math.abs(ac); i++) {
                 if (i !== 0 && ac % i === 0) {
                     let other = ac / i;
@@ -471,7 +591,6 @@
             }
 
             if (p === null) {
-                // Prime over integers
                 type = "Irreducible / Prime";
                 resultTex = overallGcf !== 1 ? `${gcfStr}(${a1}x^2 ${b1>=0?'+':''}${b1}x ${c1>=0?'+':''}${c1})` : "Prime (Cannot be factored over integers)";
                 steps.push({
@@ -516,7 +635,6 @@
                 let gcfGroup1 = gcd(a1, p);
                 let gcfGroup2 = gcd(q, c1);
                 
-                // Adjust signs for grouping consistency
                 if (q < 0 && c1 < 0) gcfGroup2 = -Math.abs(gcfGroup2);
 
                 let term1 = a1 / gcfGroup1;
@@ -553,7 +671,7 @@
         // --- Controller / DOM Rendering ---
         function factorExpression() {
             const rawInput = document.getElementById('expr-input').value;
-            const parsed = parseQuadratic(rawInput);
+            const parsed = parsePolynomial(rawInput);
             
             const stepsList = document.getElementById('steps-list');
             const resultDiv = document.getElementById('factored-output');
@@ -562,13 +680,13 @@
             const visualCard = document.getElementById('visual-model-card');
 
             if (!parsed.valid) {
-                resultDiv.innerHTML = `<span class="text-rose-300 text-lg">Invalid expression format. Try standard form like x^2 + 5x + 6</span>`;
+                resultDiv.innerHTML = `<span class="text-rose-300 text-lg">Invalid expression format. Try standard form like x^2 + 5x + 6 or x^3 - 27</span>`;
                 stepsList.innerHTML = '';
                 visualCard.classList.add('hidden');
                 return;
             }
 
-            const solution = factorQuadratic(parsed.a, parsed.b, parsed.c);
+            const solution = factorExpressionEngine(parsed);
 
             if (solution.error) {
                 resultDiv.innerHTML = `<span class="text-rose-300 text-lg">${solution.error}</span>`;
@@ -618,12 +736,14 @@
 
         function setDifficulty(diff) {
             quizDifficulty = diff;
-            ['easy', 'medium', 'special', 'mixed'].forEach(d => {
+            ['easy', 'medium', 'special', 'grouping', 'mixed'].forEach(d => {
                 const btn = document.getElementById(`diff-${d}`);
-                if (d === diff) {
-                    btn.className = "px-3 py-1.5 rounded-lg text-sm font-medium bg-[#126988] text-white";
-                } else {
-                    btn.className = "px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200";
+                if (btn) {
+                    if (d === diff) {
+                        btn.className = "px-3 py-1.5 rounded-lg text-sm font-medium bg-[#126988] text-white";
+                    } else {
+                        btn.className = "px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200";
+                    }
                 }
             });
             generateNextProblem();
@@ -634,58 +754,53 @@
             document.getElementById('quiz-hint').classList.add('hidden');
             document.getElementById('quiz-input').value = '';
 
-            let p=0, q=0, a=1;
             let mode = quizDifficulty;
-
             if (mode === 'mixed') {
-                const modes = ['easy', 'medium', 'special'];
+                const modes = ['easy', 'medium', 'special', 'grouping'];
                 mode = modes[Math.floor(Math.random() * modes.length)];
             }
 
+            let polyToSolve = null;
+
             if (mode === 'easy') {
-                p = (Math.floor(Math.random() * 9) + 1) * (Math.random() > 0.5 ? 1 : -1);
-                q = (Math.floor(Math.random() * 9) + 1) * (Math.random() > 0.5 ? 1 : -1);
-                a = 1;
+                let p = (Math.floor(Math.random() * 9) + 1) * (Math.random() > 0.5 ? 1 : -1);
+                let q = (Math.floor(Math.random() * 9) + 1) * (Math.random() > 0.5 ? 1 : -1);
+                polyToSolve = { a3: 0, a2: 1, a1: p + q, c: p * q };
             } else if (mode === 'medium') {
-                a = Math.floor(Math.random() * 3) + 2; // 2, 3, or 4
-                p = (Math.floor(Math.random() * 5) + 1) * (Math.random() > 0.5 ? 1 : -1);
-                q = (Math.floor(Math.random() * 5) + 1) * (Math.random() > 0.5 ? 1 : -1);
+                let a = Math.floor(Math.random() * 3) + 2;
+                let p = (Math.floor(Math.random() * 5) + 1) * (Math.random() > 0.5 ? 1 : -1);
+                let q = (Math.floor(Math.random() * 5) + 1) * (Math.random() > 0.5 ? 1 : -1);
+                polyToSolve = { a3: 0, a2: a, a1: a * q + p, c: p * q };
             } else if (mode === 'special') {
-                // Difference of squares or Perfect Square Trinomial
-                if (Math.random() > 0.5) {
-                    let k = Math.floor(Math.random() * 8) + 2;
-                    p = k;
-                    q = -k;
-                    a = 1;
-                } else {
-                    let k = Math.floor(Math.random() * 6) + 1;
-                    p = k;
-                    q = k;
-                    a = 1;
-                }
+                let cubeVals = [2, 3, 4, 5];
+                let k = cubeVals[Math.floor(Math.random() * cubeVals.length)];
+                let isDiff = Math.random() > 0.5;
+                polyToSolve = { a3: 1, a2: 0, a1: 0, c: isDiff ? -(k * k * k) : (k * k * k) };
+            } else if (mode === 'grouping') {
+                let m = Math.floor(Math.random() * 5) + 2;
+                let n = Math.floor(Math.random() * 5) + 1;
+                // (x^2 + n)(x + m) = x^3 + m*x^2 + n*x + n*m
+                polyToSolve = { a3: 1, a2: m, a1: n, c: n * m };
             }
 
-            let b = a === 1 ? (p + q) : (a * q + p); // handles simple vs grouping
-            let c = a === 1 ? (p * q) : (p * q);
-
-            // Construct polynomial expression LaTeX string
+            const solution = factorExpressionEngine(polyToSolve);
+            
+            // Build latex for problem display
+            let { a3, a2, a1, c } = polyToSolve;
             let exprLatex = "";
-            let aStr = a === 1 ? "" : `${a}`;
-            let bStr = b >= 0 ? `+ ${b === 1 ? '' : b}` : `- ${Math.abs(b) === 1 ? '' : Math.abs(b)}`;
-            let cStr = c >= 0 ? `+ ${c}` : `- ${Math.abs(c)}`;
+            if (a3 !== 0) exprLatex += `${a3 === 1 ? '' : a3}x^3 `;
+            if (a2 !== 0) exprLatex += `${a2 > 0 && exprLatex ? '+' : ''}${a2 === 1 ? '' : (a2 === -1 ? '-' : a2)}x^2 `;
+            if (a1 !== 0) exprLatex += `${a1 > 0 && exprLatex ? '+' : ''}${a1 === 1 ? '' : (a1 === -1 ? '-' : a1)}x `;
+            if (c !== 0) exprLatex += `${c > 0 && exprLatex ? '+' : ''}${c}`;
 
-            if (b === 0) exprLatex = `${aStr}x^2 ${cStr}`;
-            else exprLatex = `${aStr}x^2 ${bStr}x ${cStr}`;
-
-            // Expected canonical factors normalized representation
             currentQuiz = {
-                a, b, c, p, q,
-                exprLatex,
-                hint: `Find two numbers that multiply to ${a * c} and sum to ${b}.`
+                poly: polyToSolve,
+                exprLatex: exprLatex.trim(),
+                solutionTex: solution.resultTex,
+                hint: solution.steps[0] ? solution.steps[0].desc : "Look for common terms or patterns."
             };
 
-            document.getElementById('quiz-problem').innerHTML = `\$${exprLatex}\$`;
-
+            document.getElementById('quiz-problem').innerHTML = `\$${currentQuiz.exprLatex}\$`;
             safeRenderMath(document.getElementById('quiz-problem'));
         }
 
@@ -699,27 +814,14 @@
 
             if (!userAns) return;
 
-            // Generate acceptable answers
-            let { a, p, q } = currentQuiz;
-            let sol1="", sol2="";
+            const solution = factorExpressionEngine(currentQuiz.poly);
+            let sol1 = solution.resultTex;
+            let sol2 = "";
 
-            if (a === 1) {
-                let pSign = p >= 0 ? `+${p}` : `${p}`;
-                let qSign = q >= 0 ? `+${q}` : `${q}`;
-                sol1 = `(x${pSign})(x${qSign})`;
-                sol2 = `(x${qSign})(x${pSign})`;
-            } else {
-                // For a > 1, extract binomial factors and allow both orderings
-                const solution = factorQuadratic(a, currentQuiz.b, currentQuiz.c);
-                const match = solution.resultTex.match(/\(([^)]+)\)\(([^)]+)\)/);
-                if (match) {
-                    const f1 = match[1];
-                    const f2 = match[2];
-                    sol1 = `(${f1})(${f2})`;
-                    sol2 = `(${f2})(${f1})`;
-                } else {
-                    sol1 = solution.resultTex;
-                }
+            const match = sol1.match(/\(([^)]+)\)\(([^)]+)\)/);
+            if (match) {
+                sol1 = `(${match[1]})(${match[2]})`;
+                sol2 = `(${match[2]})(${match[1]})`;
             }
 
             sol1 = normalizeFactorStr(sol1).replace(/\\/g, '');
@@ -729,13 +831,10 @@
                 streak++;
                 score += 10;
                 feedback.className = "p-4 rounded-xl text-left text-sm font-medium bg-[#0e6537]/10 text-[#0e6537] border border-[#0e6537]/20 block";
-                feedback.innerHTML = "🎉 <strong>Correct!</strong> Great job solving this factoring puzzle!";
+                feedback.innerHTML = "🎉 <strong>Correct!</strong> Great job solving this factoring problem!";
             } else {
                 streak = 0;
                 feedback.className = "p-4 rounded-xl text-left text-sm font-medium bg-rose-100 text-rose-900 border border-rose-200 block";
-                
-                // Generate exact answer LaTeX
-                const solution = factorQuadratic(currentQuiz.a, currentQuiz.b, currentQuiz.c);
                 feedback.innerHTML = `❌ <strong>Not quite.</strong> The factored answer is \$${solution.resultTex}\$. Try the next one!`;
             }
 
