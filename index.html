@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra Factoring Master</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .primaryblue-bg {
+            background: #004c6e;
+        }
+        .tab-active {
+            border-bottom: 3px solid #6366f1;
+            color: #4f46e5;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen font-sans flex flex-col">
+
+    <!-- Header Navigation -->
+    <header class="primaryblue-bg text-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-md">
+                    <i data-lucide="binary" class="w-8 h-8 text-[#daf0f4]"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight">FactorCraft</h1>
+                    <p class="text-[#daf0f4] text-xs sm:text-sm">Mastering Algebraic Factoring Step-by-Step</p>
+                </div>
+            </div>
+            
+            <nav class="flex bg-white/10 p-1.5 rounded-xl backdrop-blur-md text-sm">
+                <button onclick="switchTab('solver')" id="tab-solver" class="px-4 py-2 rounded-lg transition-all font-medium flex items-center gap-2 bg-white text-[#004c6e] shadow">
+                    <i data-lucide="calculator" class="w-4 h-4"></i> Solver & Explainer
+                </button>
+                <button onclick="switchTab('practice')" id="tab-practice" class="px-4 py-2 rounded-lg transition-all font-medium flex items-center gap-2 text-white hover:bg-white/10">
+                    <i data-lucide="award" class="w-4 h-4"></i> Practice Zone
+                </button>
+                <button onclick="switchTab('guide')" id="tab-guide" class="px-4 py-2 rounded-lg transition-all font-medium flex items-center gap-2 text-white hover:bg-white/10">
+                    <i data-lucide="book-open" class="w-4 h-4"></i> Cheat Sheet
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
+
+        <!-- TAB 1: SOLVER & EXPLAINER -->
+        <section id="section-solver" class="space-y-8">
+            <!-- Input & Config Card -->
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+                <div class="max-w-2xl mx-auto text-center space-y-4">
+                    <h2 class="text-2xl font-bold text-slate-800">Quadratic & Polynomial Factoring Tool</h2>
+                    <p class="text-slate-600 text-sm">Enter a polynomial in standard form $ax^2 + bx + c$ to get a breakdown of factors and detailed steps.</p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                        <div class="relative flex-grow">
+                            <input type="text" id="expr-input" value="x^2 + 5x + 6" placeholder="e.g. 2x^2 - 7x + 3" 
+                                onkeydown="if(event.key === 'Enter') factorExpression()"
+                                class="w-full px-4 py-3.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#126988] font-mono text-lg shadow-inner">
+                        </div>
+                        <button onclick="factorExpression()" class="bg-[#126988] hover:shadow-[#0b3853] hover:bg-[#0b3853] text-white font-semibold px-6 py-3.5 rounded-xl transition shadow-md hover:shadow-[#0b3853]/10 flex items-center justify-center gap-2">
+                            <span>Factor</span>
+                            <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <!-- Example Presets -->
+                    <div class="flex flex-wrap items-center justify-center gap-2 pt-2 text-xs text-slate-500">
+                        <span>Quick Examples:</span>
+                        <button onclick="setPreset('x^2 + 5x + 6')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200">x² + 5x + 6</button>
+                        <button onclick="setPreset('2x^2 + 7x + 3')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200">2x² + 7x + 3</button>
+                        <button onclick="setPreset('x^2 - 16')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200">x² - 16</button>
+                        <button onclick="setPreset('3x^2 + 6x')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200">3x² + 6x</button>
+                        <button onclick="setPreset('4x^2 - 12x + 9')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200">4x² - 12x + 9</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Output Container -->
+            <div id="solution-container" class="space-y-6">
+                <!-- Final Result Banner -->
+                <div class="bg-[#004c6e] text-white p-6 md:p-8 rounded-2xl shadow-md flex flex-col md:flex-row items-center justify-between gap-6 border border-[#004c6e]">
+                    <div>
+                        <span class="text-[#daf0f4] text-sm uppercase">Factored Form</span>
+                        <div id="factored-output" class="text-3xl sm:text-4xl font-extrabold mt-1 text-white">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="bg-white/10 p-4 rounded-xl text-center">
+                            <span class="block text-[#daf0f4] text-sm">Identified Type</span>
+                            <span id="factoring-type" class="font-semibold text-white text-sm">Trinomial (a = 1)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step-by-Step Breakdown -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 space-y-6">
+                    <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <i data-lucide="list-checks" class="text-[#126988]"></i> Step-by-Step Solution Breakdown
+                    </h3>
+                    <div id="steps-list" class="space-y-4">
+                        <!-- Dynamic Steps injected here -->
+                    </div>
+                </div>
+
+                <!-- Visual Area Model (Grid Representation) -->
+                <div id="visual-model-card" class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 space-y-4">
+                    <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <i data-lucide="layout-grid" class="text-[#126988]"></i> Visual Box / Area Model Method
+                    </h3>
+                    <p class="text-slate-600 text-sm">Visualizing terms inside an area grid helps understand how components combine back to the original expression.</p>
+                    <div class="flex justify-center my-6">
+                        <div id="area-grid" class="grid grid-cols-2 gap-2 p-4 bg-slate-100 rounded-xl border border-slate-300 max-w-sm w-full">
+                            <!-- Grid cells injected here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: PRACTICE ZONE -->
+        <section id="section-practice" class="hidden space-y-8">
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+                <!-- Header / Progress Bar -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-6 border-b border-slate-100">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-800">Factoring Practice Arena</h2>
+                        <p class="text-slate-600 text-sm">Test your algebraic factoring skill set with real-time feedback!</p>
+                    </div>
+                    <div class="flex items-center gap-4 bg-slate-50 px-4 py-2 rounded-xl border border-slate-200">
+                        <div class="text-center">
+                            <span class="block text-xs text-slate-400 font-bold uppercase">Streak</span>
+                            <span id="streak-counter" class="text-lg font-extrabold text-[#004c6e]">0 🔥</span>
+                        </div>
+                        <div class="h-8 w-px bg-slate-200"></div>
+                        <div class="text-center">
+                            <span class="block text-xs text-slate-400 font-bold uppercase">Score</span>
+                            <span id="score-counter" class="text-lg font-extrabold text-[#0e6537]">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Difficulty Selector -->
+                <div class="flex flex-wrap gap-2 mb-8">
+                    <span class="text-sm font-semibold text-slate-600 flex items-center mr-2">Difficulty:</span>
+                    <button onclick="setDifficulty('easy')" id="diff-easy" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-[#126988] text-white">Easy (a = 1)</button>
+                    <button onclick="setDifficulty('medium')" id="diff-medium" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200">Medium (a > 1)</button>
+                    <button onclick="setDifficulty('special')" id="diff-special" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200">Special Products</button>
+                    <button onclick="setDifficulty('mixed')" id="diff-mixed" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200">Mixed Challenge</button>
+                </div>
+
+                <!-- Problem Card -->
+                <div class="bg-slate-100 rounded-2xl p-8 border border-slate-400 text-center max-w-xl mx-auto space-y-6">
+                    <span class="text-xs font-bold text-slate-600 uppercase tracking-widest bg-slate-100 px-3 py-1 rounded-full">Factor the Expression</span>
+                    
+                    <div id="quiz-problem" class="text-3xl sm:text-4xl font-extrabold text-slate-800 py-2">
+                        <!-- Expression LaTeX inserted here -->
+                    </div>
+
+                    <div class="space-y-3">
+                        <input type="text" id="quiz-input" placeholder="e.g. (x + 2)(x + 3)" 
+                            onkeydown="if(event.key === 'Enter') checkQuizAnswer()"
+                            class="w-full text-center px-4 py-3.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#126988] font-mono text-lg bg-white">
+                        
+                        <div class="flex gap-2">
+                            <button onclick="checkQuizAnswer()" class="w-full bg-[#126988] hover:bg-[#0b3853] text-white font-semibold py-3 rounded-xl transition shadow-sm">
+                                Submit Answer
+                            </button>
+                            <button onclick="toggleHint()" class="bg-amber-100 hover:bg-amber-200 text-amber-800 px-4 py-3 rounded-xl font-medium transition flex items-center gap-1">
+                                <i data-lucide="lightbulb" class="w-4 h-4"></i> Hint
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Feedback Box -->
+                    <div id="quiz-feedback" class="hidden p-4 rounded-xl text-left text-sm font-medium"></div>
+                    <div id="quiz-hint" class="hidden p-4 rounded-xl text-left text-sm bg-amber-50 text-amber-900 border border-amber-200"></div>
+                </div>
+
+                <!-- Next Button -->
+                <div class="flex justify-center mt-6">
+                    <button onclick="generateNextProblem()" class="text-[#004c6e] hover:text-[#0b3853] font-semibold text-sm flex items-center gap-1">
+                        <span>Skip / Next Problem</span> <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: CHEAT SHEET & REFERENCE GUIDE -->
+        <section id="section-guide" class="hidden space-y-8">
+            <div class="text-center max-w-2xl mx-auto space-y-2">
+                <h2 class="text-2xl font-bold text-slate-800">Factoring Reference Guide</h2>
+                <p class="text-slate-600 text-sm">Quick lookup techniques and key rules for algebraic expression factoring.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Card 1: GCF -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-[#0e6537]/10 p-2 rounded-lg text-[#0e6537]"><i data-lucide="shrink"></i></div>
+                        <h3 class="font-bold text-lg text-slate-800">1. Greatest Common Factor (GCF)</h3>
+                    </div>
+                    <p class="text-slate-600 text-sm">Always the <strong>first step</strong>! Identify numbers/variables shared by every term.</p>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-sm font-mono">
+                        $ab + ac = a(b + c)$<br>
+                        <span class="text-[#0e6537] font-sans text-xs">Ex: $6x^2 + 9x = 3x(2x + 3)$</span>
+                    </div>
+                </div>
+
+                <!-- Card 2: Difference of Squares -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-[#0e6537]/10 p-2 rounded-lg text-[#0e6537]"><i data-lucide="minus-circle"></i></div>
+                        <h3 class="font-bold text-lg text-slate-800">2. Difference of Squares</h3>
+                    </div>
+                    <p class="text-slate-600 text-sm">Applies when subtracting two perfect squares ($a^2 - b^2$).</p>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-sm font-mono">
+                        $a^2 - b^2 = (a - b)(a + b)$<br>
+                        <span class="text-[#0e6537] font-sans text-xs">Ex: $x^2 - 25 = (x - 5)(x + 5)$</span>
+                    </div>
+                </div>
+
+                <!-- Card 3: Simple Trinomials -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-[#0e6537]/10 p-2 rounded-lg text-[#0e6537]"><i data-lucide="grid"></i></div>
+                        <h3 class="font-bold text-lg text-slate-800">3. Trinomials ($x^2 + bx + c$)</h3>
+                    </div>
+                    <p class="text-slate-600 text-sm">Find two numbers $p$ and $q$ that <strong>multiply to $c$</strong> and <strong>add up to $b$</strong>.</p>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-sm font-mono">
+                        $x^2 + (p+q)x + (pq) = (x + p)(x + q)$<br>
+                        <span class="text-[#0e6537] font-sans text-xs">Ex: $x^2 + 7x + 12 = (x + 3)(x + 4)$</span>
+                    </div>
+                </div>
+
+                <!-- Card 4: AC Method -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-[#0e6537]/10 p-2 rounded-lg text-[#0e6537]"><i data-lucide="cpu"></i></div>
+                        <h3 class="font-bold text-lg text-slate-800">4. AC Method ($ax^2 + bx + c$)</h3>
+                    </div>
+                    <p class="text-slate-600 text-sm">Multiply $a \cdot c$. Find factors of $ac$ that add up to $b$. Split the middle term and factor by grouping.</p>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-sm font-mono">
+                        $2x^2 + 7x + 3 \rightarrow ac = 6$<br>
+                        <span class="text-[#0e6537] font-sans text-xs">Factors: $6$ and $1$ $\rightarrow 2x^2 + 6x + 1x + 3 = (2x+1)(x+3)$</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decision Tree Chart -->
+            <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm">
+                <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center gap-2">
+                    <i data-lucide="git-fork" class="text-[#004c6e]"></i> Factoring Strategy Flowchart
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-center text-xs">
+                    <div class="bg-[#004c6e]/10 p-4 rounded-xl border border-[#004c6e] space-y-2">
+                        <span class="font-bold text-[#004c6e] block text-sm">Step 1</span>
+                        <p class="text-slate-600">Pull out the Greatest Common Factor (GCF) if any exists.</p>
+                    </div>
+                    <div class="bg-[#004c6e]/10 p-4 rounded-xl border border-[#004c6e] space-y-2">
+                        <span class="font-bold text-[#004c6e] block text-sm">Step 2: 2 Terms?</span>
+                        <p class="text-slate-600">Check for Difference of Squares ($a^2 - b^2$).</p>
+                    </div>
+                    <div class="bg-[#004c6e]/10 p-4 rounded-xl border border-[#004c6e] space-y-2">
+                        <span class="font-bold text-[#004c6e] block text-sm">Step 3: 3 Terms?</span>
+                        <p class="text-slate-600">Use product-sum strategy ($a=1$) or AC Method ($a>1$).</p>
+                    </div>
+                    <div class="bg-[#004c6e]/10 p-4 rounded-xl border border-[#004c6e] space-y-2">
+                        <span class="font-bold text-[#004c6e] block text-sm">Step 4: Check</span>
+                        <p class="text-slate-600">Multiply factors back out (FOIL) to verify correctness.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-slate-400 pb-6 text-xs flex flex-col items-center justify-center text-center">
+       <img src="https://www.nmc.edu/images/brand-refresh/nmc-logo-wordmark-horizontal.svg" alt="NMC Logo" class="h-12 mx-auto">
+    </footer>
+
+    <!-- JavaScript Engine -->
+    <script>
+        function safeRenderMath(element = document.body) {
+            if (window.renderMathInElement && element) {
+                try {
+                    renderMathInElement(element, {
+                        delimiters: [
+                            {left: '$$', right: '$$', display: true},
+                            {left: '$', right: '$', display: false},
+                            {left: '\\(', right: '\\)', display: false},
+                            {left: '\\[', right: '\\]', display: true}
+                        ],
+                        throwOnError: false
+                    });
+                } catch (err) {
+                    console.warn('Math rendering error:', err);
+                }
+            }
+        }
+
+        // --- Tab Management ---
+        function switchTab(tab) {
+            ['solver', 'practice', 'guide'].forEach(t => {
+                const section = document.getElementById(`section-${t}`);
+                const tabBtn = document.getElementById(`tab-${t}`);
+                if (t === tab) {
+                    section.classList.remove('hidden');
+                    tabBtn.className = "px-4 py-2 rounded-lg transition-all font-medium flex items-center gap-2 bg-white text-[#004c6e] shadow";
+                } else {
+                    section.classList.add('hidden');
+                    tabBtn.className = "px-4 py-2 rounded-lg transition-all font-medium flex items-center gap-2 text-white hover:bg-white/10";
+                }
+            });
+            if (tab === 'practice' && !currentQuiz) {
+                generateNextProblem();
+            }
+        }
+
+        function setPreset(expr) {
+            document.getElementById('expr-input').value = expr;
+            factorExpression();
+        }
+
+        // --- Math & Factoring Logic Engine ---
+        function parseQuadratic(str) {
+            // Clean input string
+            str = str.replace(/\s+/g, '').replace(/\^2/g, '²').toLowerCase();
+            if (!str) return { valid: false };
+
+            // Ensure leading sign
+            if (!str.startsWith('+') && !str.startsWith('-')) {
+                str = '+' + str;
+            }
+
+            // Match terms e.g. +2x², -7x, +3, -25
+            const termRegex = /([+-])(\d*)(x²|x)?/g;
+            let match;
+            let a = 0, b = 0, c = 0;
+            let matchedLength = 0;
+
+            while ((match = termRegex.exec(str)) !== null) {
+                const sign = match[1] === '-' ? -1 : 1;
+                const numStr = match[2];
+                const varPart = match[3];
+
+                // Stop if no coefficient and no variable matched for this sign
+                if (!numStr && !varPart) break;
+
+                matchedLength += match[0].length;
+
+                let val = (numStr === '') ? sign : sign * parseInt(numStr, 10);
+
+                if (varPart === 'x²') {
+                    a += val;
+                } else if (varPart === 'x') {
+                    b += val;
+                } else {
+                    c += val;
+                }
+            }
+
+            // Must match full input string and have a quadratic (x²) term
+            if (matchedLength === str.length && a !== 0) {
+                return { a, b, c, valid: true };
+            }
+
+            return { valid: false };
+        }
+
+        function gcd(x, y) {
+            x = Math.abs(x);
+            y = Math.abs(y);
+            while(y) {
+                let t = y;
+                y = x % y;
+                x = t;
+            }
+            return x;
+        }
+
+        function factorQuadratic(a, b, c) {
+            let steps = [];
+            let resultTex = "";
+            let type = "";
+            let gridData = null;
+
+            if (a === 0) {
+                return { error: "Not a quadratic expression (coefficient of x² is 0)." };
+            }
+
+            // 1. Overall GCF Extraction
+            let overallGcf = gcd(a, gcd(b, c));
+            if (a < 0) overallGcf = -overallGcf; // keep leading term positive inside bracket
+
+            let gcfStr = "";
+            if (overallGcf !== 1) {
+                if (overallGcf === -1) gcfStr = "-";
+                else gcfStr = `${overallGcf}`;
+            }
+
+            let a1 = a / (overallGcf || 1);
+            let b1 = b / (overallGcf || 1);
+            let c1 = c / (overallGcf || 1);
+
+            if (overallGcf !== 1) {
+                steps.push({
+                    title: "Factor out the Greatest Common Factor (GCF)",
+                    desc: `Extract the common multiplier <strong>${overallGcf}</strong> from all terms.`,
+                    math: `${a}x^2 ${b>=0?'+':''}${b}x ${c>=0?'+':''}${c} = ${gcfStr}(${a1}x^2 ${b1>=0?'+':''}${b1}x ${c1>=0?'+':''}${c1})`
+                });
+            }
+
+            // 2. Case: c1 == 0 (Single x factor)
+            if (c1 === 0) {
+                type = "GCF / Linear Factor";
+                steps.push({
+                    title: "Factor variable x out",
+                    desc: "Both remaining terms share variable $x$.",
+                    math: `${gcfStr}x (${a1 === 1 ? 'x' : a1 + 'x'} ${b1>=0?'+':''}${b1})`
+                });
+                resultTex = `${gcfStr}x (${a1 === 1 ? '' : a1}x ${b1>=0?'+':''}${b1})`;
+                return { steps, resultTex, type, gridData: null };
+            }
+
+            // 3. Case: Difference of Squares (b1 == 0, c1 < 0)
+            if (b1 === 0 && c1 < 0) {
+                type = "Difference of Squares";
+                let sqrtA = Math.sqrt(a1);
+                let sqrtC = Math.sqrt(-c1);
+
+                if (Number.isInteger(sqrtA) && Number.isInteger(sqrtC)) {
+                    let termA = sqrtA === 1 ? "x" : `${sqrtA}x`;
+                    steps.push({
+                        title: "Apply Difference of Squares Pattern",
+                        desc: `Recognize form $A^2 - B^2 = (A - B)(A + B)$ where $A = ${termA}$ and $B = ${sqrtC}$.`,
+                        math: `${gcfStr}(${termA} - ${sqrtC})(${termA} + ${sqrtC})`
+                    });
+                    resultTex = `${gcfStr}(${termA} - ${sqrtC})(${termA} + ${sqrtC})`;
+                    return { steps, resultTex, type, gridData: null };
+                }
+            }
+
+            // 4. Standard Trinomial Factoring / AC Method
+            let ac = a1 * c1;
+            let p = null, q = null;
+
+            // Search for factors p, q such that p * q = ac AND p + q = b1
+            for (let i = -Math.abs(ac); i <= Math.abs(ac); i++) {
+                if (i !== 0 && ac % i === 0) {
+                    let other = ac / i;
+                    if (i + other === b1) {
+                        p = i;
+                        q = other;
+                        break;
+                    }
+                }
+            }
+
+            if (p === null) {
+                // Prime over integers
+                type = "Irreducible / Prime";
+                resultTex = overallGcf !== 1 ? `${gcfStr}(${a1}x^2 ${b1>=0?'+':''}${b1}x ${c1>=0?'+':''}${c1})` : "Prime (Cannot be factored over integers)";
+                steps.push({
+                    title: "Check Factorability",
+                    desc: `No integer factors of $ac = ${ac}$ sum to $b = ${b1}$. The quadratic is prime over integers.`,
+                    math: resultTex
+                });
+                return { steps, resultTex, type, gridData: null };
+            }
+
+            if (a1 === 1) {
+                type = "Simple Trinomial (a = 1)";
+                steps.push({
+                    title: "Find Key Number Pair",
+                    desc: `Find two numbers that multiply to $c = ${c1}$ and sum to $b = ${b1}$.`,
+                    math: `\\text{Numbers: } ${p} \\text{ and } ${q} \\quad (${p} \\times ${q} = ${c1}, \\, ${p} + ${q} = ${b1})`
+                });
+                
+                resultTex = `${gcfStr}(x ${p>=0?'+':''}${p})(x ${q>=0?'+':''}${q})`;
+                
+                steps.push({
+                    title: "Construct Binomial Factors",
+                    desc: "Write expression in $(x + p)(x + q)$ form.",
+                    math: resultTex
+                });
+
+                gridData = {
+                    topLeft: "x^2",
+                    topRight: `${p}x`,
+                    bottomLeft: `${q}x`,
+                    bottomRight: `${c1}`
+                };
+
+            } else {
+                type = "AC Method (a > 1)";
+                steps.push({
+                    title: "Calculate AC Product & Split Middle Term",
+                    desc: `Multiply $a \\cdot c = (${a1})(${c1}) = ${ac}$. Find factors that sum to $b = ${b1}$ (${p} and ${q}). Split $${b1}x$ into $${p}x + ${q}x$.`,
+                    math: `${a1}x^2 ${p>=0?'+':''}${p}x ${q>=0?'+':''}${q}x ${c1>=0?'+':''}${c1}`
+                });
+
+                let gcfGroup1 = gcd(a1, p);
+                let gcfGroup2 = gcd(q, c1);
+                
+                // Adjust signs for grouping consistency
+                if (q < 0 && c1 < 0) gcfGroup2 = -Math.abs(gcfGroup2);
+
+                let term1 = a1 / gcfGroup1;
+                let term2 = p / gcfGroup1;
+
+                steps.push({
+                    title: "Factor by Grouping",
+                    desc: "Group terms into pairs and extract common factors from each pair.",
+                    math: `${gcfGroup1 === 1 ? '' : gcfGroup1}x(${term1}x ${term2>=0?'+':''}${term2}) ${q/term1>=0?'+':''}${q/term1}(${term1}x ${term2>=0?'+':''}${term2})`
+                });
+
+                let factorA = `${gcfGroup1}x ${q/term1>=0?'+':''}${q/term1}`.replace("1x", "x");
+                let factorB = `${term1}x ${term2>=0?'+':''}${term2}`.replace("1x", "x");
+
+                resultTex = `${gcfStr}(${factorA})(${factorB})`;
+
+                steps.push({
+                    title: "Final Factored Expression",
+                    desc: "Combine grouped components into standard factored binomials.",
+                    math: resultTex
+                });
+
+                gridData = {
+                    topLeft: `${a1}x^2`,
+                    topRight: `${p}x`,
+                    bottomLeft: `${q}x`,
+                    bottomRight: `${c1}`
+                };
+            }
+
+            return { steps, resultTex, type, gridData };
+        }
+
+        // --- Controller / DOM Rendering ---
+        function factorExpression() {
+            const rawInput = document.getElementById('expr-input').value;
+            const parsed = parseQuadratic(rawInput);
+            
+            const stepsList = document.getElementById('steps-list');
+            const resultDiv = document.getElementById('factored-output');
+            const typeSpan = document.getElementById('factoring-type');
+            const gridDiv = document.getElementById('area-grid');
+            const visualCard = document.getElementById('visual-model-card');
+
+            if (!parsed.valid) {
+                resultDiv.innerHTML = `<span class="text-rose-300 text-lg">Invalid expression format. Try standard form like x^2 + 5x + 6</span>`;
+                stepsList.innerHTML = '';
+                visualCard.classList.add('hidden');
+                return;
+            }
+
+            const solution = factorQuadratic(parsed.a, parsed.b, parsed.c);
+
+            if (solution.error) {
+                resultDiv.innerHTML = `<span class="text-rose-300 text-lg">${solution.error}</span>`;
+                stepsList.innerHTML = '';
+                visualCard.classList.add('hidden');
+                return;
+            }
+
+            // Render Output
+            resultDiv.innerHTML = `\$${solution.resultTex}\$`;
+            typeSpan.innerText = solution.type;
+
+            // Render Steps
+            stepsList.innerHTML = solution.steps.map((s, idx) => `
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                    <div class="flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-[#004c6e] text-white font-bold text-xs flex items-center justify-center">${idx + 1}</span>
+                        <h4 class="font-bold text-slate-800 text-sm">${s.title}</h4>
+                    </div>
+                    <p class="text-slate-600 text-xs pl-8">${s.desc}</p>
+                    <div class="pl-8 pt-1 text-[#004c6e] font-medium text-sm">\$${s.math}\$</div>
+                </div>
+            `).join('');
+
+            // Render Visual Grid if applicable
+            if (solution.gridData) {
+                visualCard.classList.remove('hidden');
+                gridDiv.innerHTML = `
+                    <div class="p-3 bg-white border rounded-lg text-center font-mono font-semibold text-slate-700 shadow-sm">\$${solution.gridData.topLeft}\$</div>
+                    <div class="p-3 bg-[#126988]/10 border border-slate-200 rounded-lg text-center font-mono font-semibold text-[#004c6e] shadow-sm">\$${solution.gridData.topRight}\$</div>
+                    <div class="p-3 bg-[#126988]/10 border border-slate-200 rounded-lg text-center font-mono font-semibold text-[#004c6e] shadow-sm">\$${solution.gridData.bottomLeft}\$</div>
+                    <div class="p-3 bg-white border rounded-lg text-center font-mono font-semibold text-slate-700 shadow-sm">\$${solution.gridData.bottomRight}\$</div>
+                `;
+            } else {
+                visualCard.classList.add('hidden');
+            }
+
+            // Re-render LaTeX math
+            safeRenderMath(document.body);
+        }
+
+        // --- Practice / Quiz System ---
+        let quizDifficulty = 'easy';
+        let currentQuiz = null;
+        let streak = 0;
+        let score = 0;
+
+        function setDifficulty(diff) {
+            quizDifficulty = diff;
+            ['easy', 'medium', 'special', 'mixed'].forEach(d => {
+                const btn = document.getElementById(`diff-${d}`);
+                if (d === diff) {
+                    btn.className = "px-3 py-1.5 rounded-lg text-sm font-medium bg-[#126988] text-white";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200";
+                }
+            });
+            generateNextProblem();
+        }
+
+        function generateNextProblem() {
+            document.getElementById('quiz-feedback').classList.add('hidden');
+            document.getElementById('quiz-hint').classList.add('hidden');
+            document.getElementById('quiz-input').value = '';
+
+            let p=0, q=0, a=1;
+            let mode = quizDifficulty;
+
+            if (mode === 'mixed') {
+                const modes = ['easy', 'medium', 'special'];
+                mode = modes[Math.floor(Math.random() * modes.length)];
+            }
+
+            if (mode === 'easy') {
+                p = (Math.floor(Math.random() * 9) + 1) * (Math.random() > 0.5 ? 1 : -1);
+                q = (Math.floor(Math.random() * 9) + 1) * (Math.random() > 0.5 ? 1 : -1);
+                a = 1;
+            } else if (mode === 'medium') {
+                a = Math.floor(Math.random() * 3) + 2; // 2, 3, or 4
+                p = (Math.floor(Math.random() * 5) + 1) * (Math.random() > 0.5 ? 1 : -1);
+                q = (Math.floor(Math.random() * 5) + 1) * (Math.random() > 0.5 ? 1 : -1);
+            } else if (mode === 'special') {
+                // Difference of squares or Perfect Square Trinomial
+                if (Math.random() > 0.5) {
+                    let k = Math.floor(Math.random() * 8) + 2;
+                    p = k;
+                    q = -k;
+                    a = 1;
+                } else {
+                    let k = Math.floor(Math.random() * 6) + 1;
+                    p = k;
+                    q = k;
+                    a = 1;
+                }
+            }
+
+            let b = a === 1 ? (p + q) : (a * q + p); // handles simple vs grouping
+            let c = a === 1 ? (p * q) : (p * q);
+
+            // Construct polynomial expression LaTeX string
+            let exprLatex = "";
+            let aStr = a === 1 ? "" : `${a}`;
+            let bStr = b >= 0 ? `+ ${b === 1 ? '' : b}` : `- ${Math.abs(b) === 1 ? '' : Math.abs(b)}`;
+            let cStr = c >= 0 ? `+ ${c}` : `- ${Math.abs(c)}`;
+
+            if (b === 0) exprLatex = `${aStr}x^2 ${cStr}`;
+            else exprLatex = `${aStr}x^2 ${bStr}x ${cStr}`;
+
+            // Expected canonical factors normalized representation
+            currentQuiz = {
+                a, b, c, p, q,
+                exprLatex,
+                hint: `Find two numbers that multiply to ${a * c} and sum to ${b}.`
+            };
+
+            document.getElementById('quiz-problem').innerHTML = `\$${exprLatex}\$`;
+
+            safeRenderMath(document.getElementById('quiz-problem'));
+        }
+
+        function normalizeFactorStr(str) {
+            return str.replace(/\s+/g, '').replace(/\*/g, '').toLowerCase();
+        }
+
+        function checkQuizAnswer() {
+            const userAns = normalizeFactorStr(document.getElementById('quiz-input').value);
+            const feedback = document.getElementById('quiz-feedback');
+
+            if (!userAns) return;
+
+            // Generate acceptable answers
+            let { a, p, q } = currentQuiz;
+            let sol1="", sol2="";
+
+            if (a === 1) {
+                let pSign = p >= 0 ? `+${p}` : `${p}`;
+                let qSign = q >= 0 ? `+${q}` : `${q}`;
+                sol1 = `(x${pSign})(x${qSign})`;
+                sol2 = `(x${qSign})(x${pSign})`;
+            } else {
+                // For a > 1, extract binomial factors and allow both orderings
+                const solution = factorQuadratic(a, currentQuiz.b, currentQuiz.c);
+                const match = solution.resultTex.match(/\(([^)]+)\)\(([^)]+)\)/);
+                if (match) {
+                    const f1 = match[1];
+                    const f2 = match[2];
+                    sol1 = `(${f1})(${f2})`;
+                    sol2 = `(${f2})(${f1})`;
+                } else {
+                    sol1 = solution.resultTex;
+                }
+            }
+
+            sol1 = normalizeFactorStr(sol1).replace(/\\/g, '');
+            sol2 = normalizeFactorStr(sol2).replace(/\\/g, '');
+
+            if (userAns === sol1 || (sol2 && userAns === sol2)) {
+                streak++;
+                score += 10;
+                feedback.className = "p-4 rounded-xl text-left text-sm font-medium bg-[#0e6537]/10 text-[#0e6537] border border-[#0e6537]/20 block";
+                feedback.innerHTML = "🎉 <strong>Correct!</strong> Great job solving this factoring puzzle!";
+            } else {
+                streak = 0;
+                feedback.className = "p-4 rounded-xl text-left text-sm font-medium bg-rose-100 text-rose-900 border border-rose-200 block";
+                
+                // Generate exact answer LaTeX
+                const solution = factorQuadratic(currentQuiz.a, currentQuiz.b, currentQuiz.c);
+                feedback.innerHTML = `❌ <strong>Not quite.</strong> The factored answer is \$${solution.resultTex}\$. Try the next one!`;
+            }
+
+            document.getElementById('streak-counter').innerText = `${streak} 🔥`;
+            document.getElementById('score-counter').innerText = score;
+
+            safeRenderMath(feedback);
+        }
+
+        function toggleHint() {
+            const hintBox = document.getElementById('quiz-hint');
+            if (hintBox.classList.contains('hidden')) {
+                hintBox.classList.remove('hidden');
+                hintBox.innerHTML = `💡 <strong>Hint:</strong> ${currentQuiz.hint}`;
+            } else {
+                hintBox.classList.add('hidden');
+            }
+        }
+
+        // Initialize icons and default factor on page load
+        window.onload = function() {
+            lucide.createIcons();
+            factorExpression();
+            safeRenderMath(document.body);
+        };
+    </script>
+</body>
+</html>
